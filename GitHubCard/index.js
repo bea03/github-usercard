@@ -24,8 +24,6 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
-
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
 
@@ -45,8 +43,71 @@ const followersArray = [];
 </div>
 
 */
+/*
+axios.get('https://api.github.com/users/bea03')
 
-/* List of LS Instructors Github username's: 
+.then(userData => {
+  console.log(userData);
+})
+*/
+
+const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
+
+followersArray.forEach(userData => {
+  axios.get(`https://api.github.com/users/${userData}`)
+
+  .then(userData => {
+    gitCards.appendChild(createGitCard(userData.data));
+  })
+  .catch(err => {
+    console.log('error');
+  })
+});
+
+const gitCards = document.querySelector('.cards');
+
+
+function createGitCard(data) {
+
+const cardDiv = document.createElement('div');
+cardDiv.classList.add('card');
+
+const imgElement = document.createElement('img');
+imgElement.setAttribute('src', `${data.avatar_url}`);
+cardDiv.appendChild(imgElement);
+
+const cardInfoDiv = document.createElement('div');
+cardInfoDiv.classList.add('card-info');
+cardDiv.appendChild(cardInfoDiv);
+
+const hThree = document.createElement('h3');
+hThree.classList.add('name');
+hThree.textContent = data.name;
+cardInfoDiv.appendChild(hThree);
+
+const usernamePara = document.createElement('p');
+usernamePara.classList.add('username');
+usernamePara.textContent = data.login;
+cardInfoDiv.appendChild(usernamePara);
+
+const locationPara = document.createElement('p');
+locationPara.textContent = `Location: ${data.location}`;
+cardInfoDiv.appendChild(locationPara);
+
+const profilePara = document.createElement('p');
+profilePara.textContent = `Profile: ${profileLink}`;
+cardInfoDiv.appendChild(profilePara);
+
+const profileLink = document.createElement('a');
+profileLink.textContent = data.html_url;
+profileLink.setAttribute('href', `${data.html_url}`);
+profilePara.appendChild(profileLink);
+
+return cardDiv;
+
+}
+/*
+ List of LS Instructors Github username's: 
   tetondan
   dustinmyers
   justsml
